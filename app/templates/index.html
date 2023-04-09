@@ -1,0 +1,68 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h1 class="text-center mb-2">Home</h1>
+<h2 class="text-center">Welcome {{current_user.username}}</h2>
+<input id="user_id" hidden value="{{ current_user.id }}"> </input>
+
+<button class="start-button" >Start recording</button>
+<button class="stop-button" >Stop recording</button>
+
+<script type="text/javascript">
+    (function() {
+      const uploadURL = "{{ url_for('audio_upload') }}";
+      const startButton = document.querySelector(".start-button");
+      const userID = document.getElementById("user_id").value;
+      
+      startButton.addEventListener("click", function() {
+        if (!navigator.mediaDevices) {
+          console.error("getUserMedia not supported.")
+          return;
+        }
+
+        const constraints = { audio: true };
+        navigator.mediaDevices.getUserMedia(constraints)
+        .then(function(stream) {
+            let chunks = []
+            let recorder = new MediaRecorder(stream);
+            recorder.ondataavailable = event => {
+                chunks.push(event.data);
+            };
+            recorder.onstop = event => {
+              console.log("Recording stopped.")
+              let blob = new Blob(chunks, { type: recorder.mimeType }); 
+              chunks = [];
+              startButton.disabled = false;
+
+              let formData = new FormData();
+              formData.append('audio_file', blob);
+              formData.append('current_user',userID);
+
+              fetch(uploadURL, {
+                method: "POST",
+                cache: "no-cache",
+                body: formData
+              }).then(resp => {
+                if (resp.status === 200) {
+                  window.location.reload(true);
+                } else {
+                  console.error("Error:", resp)
+                }
+              }).catch(err => {
+                console.error(err);
+              });
+            };
+            recorder.onstart = event => {
+              console.log("Recording started.");
+              startButton.disabled = true;
+              setTimeout(function() { recorder.stop(); }, 2000);
+            };
+            recorder.start();
+        })
+        .catch(function(err) {
+            console.error(err);
+        });
+      });
+    })();
+    </script>
+{% endblock %}
