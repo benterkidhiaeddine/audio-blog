@@ -1,4 +1,4 @@
-from flask import render_template,url_for,redirect,flash,request,abort,current_app
+from flask import render_template,url_for,redirect,flash,request,abort,current_app,send_from_directory
 from werkzeug.utils import secure_filename
 from werkzeug.urls import url_parse
 from flask_login import current_user,login_user,logout_user,login_required
@@ -85,12 +85,13 @@ def audio_upload():
     if 'audio_file' in request.files:
         file = request.files['audio_file']
         extname = guess_extension(file.mimetype)
+        #eventualy write code for validating extention types
+        print(extname)
         if not extname:
             abort(400)
 
-        current_user_id = request.form.get("current_user")
         
-        dir_path = os.path.join(current_app.instance_path,current_app.config.get("UPLOAD_DIRECTORY"),secure_filename(current_user_id)) 
+        dir_path = os.path.join(current_app.instance_path,current_app.config.get("UPLOAD_DIRECTORY"),current_user.get_id()) 
         print(dir_path)
         print(os.path.exists(dir_path))
         if not os.path.exists(dir_path):
@@ -98,4 +99,19 @@ def audio_upload():
         file.save(os.path.join(dir_path,f"first_audio{extname}"))
 
     return "audio_uploaded_with_sucess"
+
+
+@app.route("/user/audios")
+@login_required
+def user_audios():
+    files = os.listdir(os.path.join(current_app.instance_path,current_app.config['UPLOAD_DIRECTORY'],current_user.get_id()))
+    print(files)
+    return render_template("user_audios.html",files = files)
    
+
+
+@app.route('/uploads/<int:user_id>/<path:filename>')
+def download_file(user_id,filename):
+    
+    return send_from_directory(os.path.join(current_app.instance_path,current_app.config['UPLOAD_DIRECTORY'],str(user_id)),
+                               filename)

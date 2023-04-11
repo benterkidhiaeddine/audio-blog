@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+    {% for file in files %}
+    <audio controls src="{{ url_for('download_file',filename = file , user_id = current_user.id )}}"></audio>
+    {% endfor %}
+{% endblock %}

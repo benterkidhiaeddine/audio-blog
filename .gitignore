@@ -1,0 +1,6 @@
+__pycahce__/
+.db
+.pdf
+instance/
+venv
+

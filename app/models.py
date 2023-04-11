@@ -8,7 +8,7 @@ class User(UserMixin,db.Model):
     username = db.Column(db.String(64),unique=True)
     email = db.Column(db.String(120),unique=True)
     hashed_password = db.Column(db.String(128))
-
+    audios = db.relationship('Audio',backref='author')
 
     def __repr__(self):
         return f"<User {self.username}>"
@@ -24,7 +24,7 @@ class Audio(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     answer_number = db.Column(db.Integer)
     audio_URL = db.Column(db.String(120))
-
+    user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
 
 @login.user_loader
 def load_user(id):

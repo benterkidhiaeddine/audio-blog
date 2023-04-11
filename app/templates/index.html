@@ -7,14 +7,22 @@
 
 <button class="start-button" >Start recording</button>
 <button class="stop-button" >Stop recording</button>
+<select name="question-selection" id="">
+  <option value="1">Question1</option>
+  <option value="2">Question2</option>
+  <option value="3">Question3</option>
+  <option value="4">Question4</option>
+</select>
 
 <script type="text/javascript">
-    (function() {
+   
       const uploadURL = "{{ url_for('audio_upload') }}";
       const startButton = document.querySelector(".start-button");
+      const stopButton = document.querySelector(".stop-button")
       const userID = document.getElementById("user_id").value;
       
       startButton.addEventListener("click", function() {
+        //make sure that mediaDevices is supported
         if (!navigator.mediaDevices) {
           console.error("getUserMedia not supported.")
           return;
@@ -28,6 +36,28 @@
             recorder.ondataavailable = event => {
                 chunks.push(event.data);
             };
+            
+            
+            
+            //when click the stop button we stop recording 
+            
+            stopButton.addEventListener("click",()=>{
+              console.log("stop recording")
+              recorder.stop();
+            })
+            
+            
+            
+            
+            recorder.onstart = event => {
+              console.log("Recording started.");
+              startButton.disabled = true;
+            };
+            recorder.start();
+            
+            
+            
+            
             recorder.onstop = event => {
               console.log("Recording stopped.")
               let blob = new Blob(chunks, { type: recorder.mimeType }); 
@@ -36,7 +66,7 @@
 
               let formData = new FormData();
               formData.append('audio_file', blob);
-              formData.append('current_user',userID);
+              
 
               fetch(uploadURL, {
                 method: "POST",
@@ -52,17 +82,13 @@
                 console.error(err);
               });
             };
-            recorder.onstart = event => {
-              console.log("Recording started.");
-              startButton.disabled = true;
-              setTimeout(function() { recorder.stop(); }, 2000);
-            };
-            recorder.start();
         })
+        
+        
         .catch(function(err) {
             console.error(err);
         });
       });
-    })();
+    ;
     </script>
 {% endblock %}
