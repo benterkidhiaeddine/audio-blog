@@ -13,7 +13,7 @@ class LoginForm(FlaskForm):
     submit = SubmitField("Sign in")
 
 class RegisterForm(FlaskForm):
-    email = StringField("email",validators=[DataRequired(),Length(max=120)])
+    email = EmailField("email",validators=[DataRequired(),Length(max=120)])
     username = StringField('username',validators=[DataRequired(),Length(max=64)])
     password = PasswordField('password',validators=[DataRequired()])
     confirm_password = PasswordField('confirm your password',validators=[DataRequired(),EqualTo('password',"passwords don't match")])
@@ -31,3 +31,17 @@ class RegisterForm(FlaskForm):
         user = User.query.filter_by(email = given_email.data).first()
         if user is not None:
             raise ValidationError('Email was taken,pleas user a different email.')
+        
+
+
+ 
+
+class PasswordResetForm(FlaskForm):
+    password = PasswordField('password',validators=[DataRequired()])
+    confirm_password = PasswordField('confirm your password',validators=[DataRequired(),EqualTo('password',"passwords don't match")])
+    submit  =SubmitField("Reset password")
+
+
+class RequestResetForm(FlaskForm):
+    email = EmailField("email",validators=[DataRequired(),Length(max=120)])
+    submit  =SubmitField("request reset")

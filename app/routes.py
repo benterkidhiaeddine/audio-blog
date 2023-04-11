@@ -7,8 +7,8 @@ from mimetypes import guess_extension
 
 from app import app,db
 from app.models import User
-from app.forms import LoginForm,RegisterForm
-
+from app.forms import LoginForm,RegisterForm,PasswordResetForm,RequestResetForm
+from app.mail import send_email
 
 
 
@@ -66,6 +66,46 @@ def register():
     
     
     return render_template('register.html',form = form,title = title)
+
+
+#request reset 
+@app.route("/request_reset",methods = ["POST","GET"])
+def request_reset():
+
+
+    form = RequestResetForm()
+    title = "Request Reset"
+
+    if form.validate_on_submit():
+        user =User.query.filter_by(email = form.email.data).first()
+        if not user:
+            flash("A user with  this email doesn't exist","alert alert-warning")
+        else:
+            send_email(user)
+            flash("check your Email","alert alert-success")
+    
+    return render_template("request_reset.html",form = form , title = title)
+
+
+#reset password 
+@app.route("/reset_password/<token>",methods=['GET','POST'])
+def reset_password(token):
+    user = User.verify_reset_token(token)
+
+    if user is None:
+        flash("token is invlaid or has expired","alert alert-warning")
+        return redirect(url_for('request_reset'))
+
+    form = PasswordResetForm()
+    title = "Reset Password"
+    if form.validate_on_submit():
+        user.set_password(form.password.data)
+        db.session.commit()
+        flash("password has been reset successfully","alert alert-success")
+        return redirect(url_for('login'))
+    
+    return render_template("reset_password.html",title=title,form = form ,token = token)
+
 
 #-----------------------------------------------------------------------------------------------------------------------------
 
