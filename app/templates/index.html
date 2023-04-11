@@ -3,23 +3,44 @@
 {% block content %}
 <h1 class="text-center mb-2">Home</h1>
 <h2 class="text-center">Welcome {{current_user.username}}</h2>
-<input id="user_id" hidden value="{{ current_user.id }}"> </input>
+
+
+
+<p>Select the qeustion you want to record your answer for then click the record button , when you are satisfied with your answer click the stop button</p>
+<p>If you want to redo your recording wait a few moments and click the record button once again</p>
 
 <button class="start-button" >Start recording</button>
 <button class="stop-button" >Stop recording</button>
-<select name="question-selection" id="">
+<select name="question-selection" id="question-selection">
   <option value="1">Question1</option>
   <option value="2">Question2</option>
   <option value="3">Question3</option>
-  <option value="4">Question4</option>
+  <option value="5">Question5</option>
+  <option value="6">Question6</option>
+  <option value="7">Question7</option>
+  <option value="8">Question8</option>
+  <option value="9">Question9</option>
+  <option value="10">Question10</option>
+
 </select>
+
+<p>Question1</p>
+<p>Question1</p>
+<p>Question1</p>
+<p>Question1</p>
+<p>Question1</p>
+<p>Question1</p>
+<p>Question1</p>
+<p>Question1</p>
+<p>Question1</p>
 
 <script type="text/javascript">
    
       const uploadURL = "{{ url_for('audio_upload') }}";
       const startButton = document.querySelector(".start-button");
-      const stopButton = document.querySelector(".stop-button")
+      const stopButton = document.querySelector(".stop-button");
       const userID = document.getElementById("user_id").value;
+      const selectedQuestion = document.getElementById("question-selection");
       
       startButton.addEventListener("click", function() {
         //make sure that mediaDevices is supported
@@ -35,8 +56,9 @@
             let recorder = new MediaRecorder(stream);
             recorder.ondataavailable = event => {
                 chunks.push(event.data);
-            };
-            
+              };
+              
+            recorder.start();
             
             
             //when click the stop button we stop recording 
@@ -48,16 +70,15 @@
             
             
             
-            
+            //disable the record button when recording has started
             recorder.onstart = event => {
               console.log("Recording started.");
               startButton.disabled = true;
             };
-            recorder.start();
             
             
             
-            
+            //when recording stops send the recorded audio to the server
             recorder.onstop = event => {
               console.log("Recording stopped.")
               let blob = new Blob(chunks, { type: recorder.mimeType }); 
@@ -66,7 +87,8 @@
 
               let formData = new FormData();
               formData.append('audio_file', blob);
-              
+              //get the number of the selected question the user want to record his answer to
+              formData.append('question_number',selectedQuestion.value);
 
               fetch(uploadURL, {
                 method: "POST",

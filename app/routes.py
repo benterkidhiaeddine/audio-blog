@@ -80,6 +80,7 @@ def index():
     return render_template('index.html', title=title)
 
 @app.route('/audio-upload', methods=['POST'])
+@login_required
 def audio_upload():
     #check if audio  file was uploaded
     if 'audio_file' in request.files:
@@ -90,13 +91,13 @@ def audio_upload():
         if not extname:
             abort(400)
 
-        
+        question_number = request.form.get("question_number")
         dir_path = os.path.join(current_app.instance_path,current_app.config.get("UPLOAD_DIRECTORY"),current_user.get_id()) 
         print(dir_path)
         print(os.path.exists(dir_path))
         if not os.path.exists(dir_path):
            os.mkdir(dir_path)
-        file.save(os.path.join(dir_path,f"first_audio{extname}"))
+        file.save(os.path.join(dir_path,f"{question_number}{extname}"))
 
     return "audio_uploaded_with_sucess"
 
@@ -111,6 +112,7 @@ def user_audios():
 
 
 @app.route('/uploads/<int:user_id>/<path:filename>')
+@login_required
 def download_file(user_id,filename):
     
     return send_from_directory(os.path.join(current_app.instance_path,current_app.config['UPLOAD_DIRECTORY'],str(user_id)),
