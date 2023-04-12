@@ -13,8 +13,8 @@ class LoginForm(FlaskForm):
     submit = SubmitField("Sign in")
 
 class RegisterForm(FlaskForm):
-    email = EmailField("email",validators=[DataRequired(),Length(max=120)])
-    username = StringField('username',validators=[DataRequired(),Length(max=64)])
+    email = EmailField("Email",validators=[DataRequired(),Length(max=120)])
+    username = StringField('Username',validators=[DataRequired(),Length(max=64)])
     password = PasswordField('password',validators=[DataRequired()])
     confirm_password = PasswordField('confirm your password',validators=[DataRequired(),EqualTo('password',"passwords don't match")])
     submit  =SubmitField("Register")
@@ -34,14 +34,17 @@ class RegisterForm(FlaskForm):
         
 
 
- 
-
 class PasswordResetForm(FlaskForm):
-    password = PasswordField('password',validators=[DataRequired()])
+    password = PasswordField('Password',validators=[DataRequired()])
     confirm_password = PasswordField('confirm your password',validators=[DataRequired(),EqualTo('password',"passwords don't match")])
     submit  =SubmitField("Reset password")
 
 
 class RequestResetForm(FlaskForm):
-    email = EmailField("email",validators=[DataRequired(),Length(max=120)])
-    submit  =SubmitField("request reset")
+    email = EmailField("Email",validators=[DataRequired(),Length(max=120)])
+    submit  =SubmitField("Request reset")
+
+
+class SearchForm(FlaskForm):
+    searched = StringField("searched",validators=[DataRequired()])
+    submit  =SubmitField("Search user")

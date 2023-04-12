@@ -1,8 +1,34 @@
 {% extends "layout.html" %}
 
 {% block content %}
-
-    {% for file in files %}
-    <audio controls src="{{ url_for('download_file',filename = file , user_id = current_user.id )}}"></audio>
-    {% endfor %}
+<div class="container">
+        <h1 class="text-center mb-2">{{title}}</h1>
+        {% if not files %}
+    
+        <p>This user doesn't currently have any recorded audio</p>
+        {% endif %}
+    
+        {% for file in files %}
+        <div class="accordion " id="accordionExample{{loop.index}}"  data-bs-theme="dark">
+            <div class="accordion-item">
+              <h2 class="accordion-header">
+                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{loop.index}}" aria-expanded="true" aria-controls="collapse{{loop.index}}">
+                  Answer {{loop.index}}
+                </button>
+              </h2>
+              <div id="collapse{{loop.index}}" class="accordion-collapse collapse show" data-bs-parent="#accordionExample{{loop.index}}">
+                <div class="accordion-body">
+                    <audio  controls src="{{ url_for('download_file',filename = file , user_id = current_user.id )}}"></audio>
+    
+                </div>
+              </div>
+            </div>
+          </div>
+    
+        {% endfor %}
+</div>
 {% endblock %}
+
+
+
+

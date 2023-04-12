@@ -8,7 +8,7 @@
         
             {{ form.hidden_tag() }}
            
-            <div class="form-group col-12">
+            <div class="form-group col-12 mb-2">
                 {{ form.email.label }}
                 {{ form.email(size=32,class_='form-control',autocomplete='off') }}
                 {% for error in form.email.errors %}

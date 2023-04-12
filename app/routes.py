@@ -7,7 +7,7 @@ from mimetypes import guess_extension
 
 from app import app,db
 from app.models import User
-from app.forms import LoginForm,RegisterForm,PasswordResetForm,RequestResetForm
+from app.forms import LoginForm,RegisterForm,PasswordResetForm,RequestResetForm,SearchForm
 from app.mail import send_email
 
 
@@ -51,7 +51,7 @@ def logout():
 #register 
 @app.route('/register',methods=['POST','GET'])
 def register():
-    title = "register"
+    title = "Register"
     if current_user.is_authenticated: # type: ignore
         return redirect(url_for('index'))
     
@@ -67,7 +67,7 @@ def register():
     
     return render_template('register.html',form = form,title = title)
 
-
+#password reset functionality --------------------------------------------------------------------------------------------------------------------
 #request reset 
 @app.route("/request_reset",methods = ["POST","GET"])
 def request_reset():
@@ -116,8 +116,22 @@ def reset_password(token):
 @app.route('/')
 @login_required
 def index():
+
+    question_list=[
+        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque, neque? Quia, veritatis?",
+        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque, neque? Quia, veritatis?",
+        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque, neque? Quia, veritatis?",
+        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque, neque? Quia, veritatis?",
+        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque, neque? Quia, veritatis?",
+        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque, neque? Quia, veritatis?",
+        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque, neque? Quia, veritatis?",
+        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque, neque? Quia, veritatis?",
+        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque, neque? Quia, veritatis?",
+        "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque, neque? Quia, veritatis?",
+      
+    ]
     title = "Home"
-    return render_template('index.html', title=title)
+    return render_template('index.html', title=title, question_list = question_list)
 
 @app.route('/audio-upload', methods=['POST'])
 @login_required
@@ -139,15 +153,15 @@ def audio_upload():
            os.mkdir(dir_path)
         file.save(os.path.join(dir_path,f"{question_number}{extname}"))
 
-    return "audio_uploaded_with_sucess"
+    return "audio_uploaded_with_success"
 
 
-@app.route("/user/audios")
+@app.route("/<int:user_id>/audios")
 @login_required
-def user_audios():
-    files = os.listdir(os.path.join(current_app.instance_path,current_app.config['UPLOAD_DIRECTORY'],current_user.get_id()))
-    print(files)
-    return render_template("user_audios.html",files = files)
+def user_audios(user_id):
+    files = os.listdir(os.path.join(current_app.instance_path,current_app.config['UPLOAD_DIRECTORY'],str(user_id)))
+    title = "Audio answers"
+    return render_template("user_audios.html",files = files ,title = title)
    
 
 
@@ -157,3 +171,28 @@ def download_file(user_id,filename):
     
     return send_from_directory(os.path.join(current_app.instance_path,current_app.config['UPLOAD_DIRECTORY'],str(user_id)),
                                filename)
+
+
+
+#Search users form 
+@app.route("/search",methods=['POST','GET'])
+@login_required
+def search():
+
+    form = SearchForm()
+    title = "Search User"
+
+    if form.validate_on_submit():
+        searched_user = form.searched.data
+        search_result = User.query.filter_by( username = searched_user).first()
+        print(search_result)
+        if search_result is None:
+            flash("the searched user was not found","alert alert-warning")
+            return redirect(url_for('search'))    
+
+        return redirect(url_for('user_audios',user_id = search_result.id))
+        
+        
+
+
+    return render_template("listen.html",form = form , title = title)

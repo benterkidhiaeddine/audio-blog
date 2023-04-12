@@ -1,47 +1,147 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<h1 class="text-center mb-2">Home</h1>
-<h2 class="text-center">Welcome {{current_user.username}}</h2>
+<div class="container">
+  <h1 class="text-center mb-2">Home</h1>
+  
+  
+  
+  
+  <div class="container">
+    <div class="container d-flex mb-4">
+      <label  for="question-selection">Select the question you want to record your answer for:</label>
+      <select  class="form-select " name="question-selection" id="question-selection">
+        <option value="1">Question1</option>
+        <option value="2">Question2</option>
+        <option value="3">Question3</option>
+        <option value="5">Question5</option>
+        <option value="6">Question6</option>
+        <option value="7">Question7</option>
+        <option value="8">Question8</option>
+        <option value="9">Question9</option>
+        <option value="10">Question10</option>
+      
+      
+      </select>
+    </div>
+    
+    
+    
+    <div class="container d-flex justify-content-around align-items-center mb-4">
+      
+      <button class="btn btn-primary" id="start-button" >Start recording</button>
+      <button class="btn btn-primary" id="stop-button" >Stop recording</button>
+      <div id="recording-duration ">Recording time: <span id="minutes">00</span>:<span id="seconds">00</span></div>
+      
+    </div>
+    
+
+    <div class="accordion mb-4" id="accordionExample"  data-bs-theme="dark">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            How to use the recording functionality
+          </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+          <div class="accordion-body">
+            <p>Select the qeustion you want to record your answer for then click the record button , when you are satisfied with your answer click the stop button</p>
+            <p>If you want to redo your recording wait a few moments and click the record button once again</p>
+            
+          </div>
+        </div>
+      </div>
+    </div>
 
 
-
-<p>Select the qeustion you want to record your answer for then click the record button , when you are satisfied with your answer click the stop button</p>
-<p>If you want to redo your recording wait a few moments and click the record button once again</p>
-
-<button class="start-button" >Start recording</button>
-<button class="stop-button" >Stop recording</button>
-<select name="question-selection" id="question-selection">
-  <option value="1">Question1</option>
-  <option value="2">Question2</option>
-  <option value="3">Question3</option>
-  <option value="5">Question5</option>
-  <option value="6">Question6</option>
-  <option value="7">Question7</option>
-  <option value="8">Question8</option>
-  <option value="9">Question9</option>
-  <option value="10">Question10</option>
-
-</select>
-
-<p>Question1</p>
-<p>Question1</p>
-<p>Question1</p>
-<p>Question1</p>
-<p>Question1</p>
-<p>Question1</p>
-<p>Question1</p>
-<p>Question1</p>
-<p>Question1</p>
+    <h2 class="mb-4">Answer these questions by recording your answer:</h2>
+    {% for question in question_list%}
+    
+    <div class="accordion " id="accordionExample{{loop.index}}"  data-bs-theme="dark">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{loop.index}}" aria-expanded="true" aria-controls="collapse{{loop.index}}">
+            Question {{loop.index}}
+          </button>
+        </h2>
+        <div id="collapse{{loop.index}}" class="accordion-collapse collapse show" data-bs-parent="#accordionExample{{loop.index}}">
+          <div class="accordion-body">
+            {{question}}
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    {% endfor%}
+  </div>
+  </div>
 
 <script type="text/javascript">
    
+
+
+
+
+
+
       const uploadURL = "{{ url_for('audio_upload') }}";
-      const startButton = document.querySelector(".start-button");
-      const stopButton = document.querySelector(".stop-button");
-      const userID = document.getElementById("user_id").value;
+      const startButton = document.getElementById("start-button");
+      const stopButton = document.getElementById("stop-button");
+      stopButton.disabled =true;
       const selectedQuestion = document.getElementById("question-selection");
-      
+      const appendMinutes = document.getElementById('minutes');
+      const appendSeconds = document.getElementById('seconds');
+      let seconds = 00;
+      let minutes = 00;
+      let Interval;
+
+      startButton.addEventListener('click',function() {
+        
+          clearInterval(Interval);
+          Interval = setInterval(startTimer, 1000);
+        });
+        
+      stopButton.addEventListener('click',function(){
+          clearInterval(Interval);
+          seconds = "00";
+          minutes = "00";
+          appendSeconds.innerHTML = seconds;
+          appendMinutes.innerHTML = minutes;
+      });
+    
+
+   
+    
+    
+    
+        function startTimer () {
+          seconds++; 
+          
+          if(seconds <= 9){
+            appendSeconds.innerHTML = "0" + seconds;
+          }
+          
+          if (seconds > 9){
+            appendSeconds.innerHTML = seconds;
+            
+          } 
+          
+          if (seconds > 99) {
+            console.log("minutes");
+            minutes++;
+            appendMinutes.innerHTML = "0" + minutes;
+            minutes = 0;
+            appendMinutes.innerHTML = "0" + 0;
+          }
+          
+          if (minutes > 9){
+            appendMinutes.innerHTML = minutes;
+          }
+        
+        }
+  
+    
       startButton.addEventListener("click", function() {
         //make sure that mediaDevices is supported
         if (!navigator.mediaDevices) {
@@ -59,6 +159,8 @@
               };
               
             recorder.start();
+            stopButton.disabled =false;
+
             
             
             //when click the stop button we stop recording 
@@ -111,6 +213,8 @@
             console.error(err);
         });
       });
-    ;
+    
+
+
     </script>
 {% endblock %}
