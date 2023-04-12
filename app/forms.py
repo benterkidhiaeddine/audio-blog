@@ -46,5 +46,5 @@ class RequestResetForm(FlaskForm):
 
 
 class SearchForm(FlaskForm):
-    searched = StringField("searched",validators=[DataRequired()])
+    searched = StringField("Enter the name of the user you want to listen to his recordings:",validators=[DataRequired()])
     submit  =SubmitField("Search user")

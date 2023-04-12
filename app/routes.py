@@ -159,9 +159,14 @@ def audio_upload():
 @app.route("/<int:user_id>/audios")
 @login_required
 def user_audios(user_id):
-    files = os.listdir(os.path.join(current_app.instance_path,current_app.config['UPLOAD_DIRECTORY'],str(user_id)))
+    file_paths = os.listdir(os.path.join(current_app.instance_path,current_app.config['UPLOAD_DIRECTORY'],str(user_id)))
+    file_names = [ os.path.splitext(file)[0] for file in file_paths]
+    files = []
+    for file_path,file_name in zip(file_paths,file_names):
+        files.append({"name":file_name,"path":file_path})
+
     title = "Audio answers"
-    return render_template("user_audios.html",files = files ,title = title)
+    return render_template("user_audios.html",files = files,title = title ,user_id = user_id)
    
 
 
