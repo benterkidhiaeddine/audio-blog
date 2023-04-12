@@ -16,7 +16,7 @@ def send_email(user):
     msg = Message()
     msg.subject = "Flask App Password Reset"
    
-    msg.sender = "thekizzer.swag@gmail.com"
+    msg.sender = "Enter-your-mail-here"
     msg.recipients = [user.email]
     msg.html = render_template('reset_email.html', user=user, token=token)
     thr = Thread(target=async_email_send,args=[app,msg])

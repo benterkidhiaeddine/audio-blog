@@ -15,6 +15,6 @@ class Config(object):
     MAIL_SERVER = 'smtp.gmail.com'
     MAIL_PORT = 587
     MAIL_USE_TLS = True
-    MAIL_USERNAME = "thekizzer.swag@gmail.com"
+    MAIL_USERNAME = "Enter-your-mail here"
     
-    MAIL_PASSWORD = "btyijoboychpmkng"
+    MAIL_PASSWORD = "enter your mail apps password for your google account after you set it up"
