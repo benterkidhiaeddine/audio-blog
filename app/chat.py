@@ -46,6 +46,6 @@ def get_response(msg):
             if tag == intent['tag']:
                 return random.choice(intent['responses'])
     else:
-        return "{bot_name}: I do not understand..."
+        return f"{bot_name}: I do not understand..."
 
 

@@ -206,7 +206,7 @@ def search():
 
 
 #route for returning the chat bot response to the user ------------------------------------------------------------------------------------------------------------------------------------
-@app.route("/predict")
+@app.route("/predict",methods =['POST'])
 def predict():
     user_text = request.get_json().get("message")
     #TODO : check if user input is valid
