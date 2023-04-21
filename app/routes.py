@@ -1,4 +1,4 @@
-from flask import render_template,url_for,redirect,flash,request,abort,current_app,send_from_directory
+from flask import render_template,url_for,redirect,flash,request,abort,current_app,send_from_directory,jsonify
 from werkzeug.utils import secure_filename
 from werkzeug.urls import url_parse
 from flask_login import current_user,login_user,logout_user,login_required
@@ -9,6 +9,7 @@ from app import app,db
 from app.models import User
 from app.forms import LoginForm,RegisterForm,PasswordResetForm,RequestResetForm,SearchForm
 from app.mail import send_email
+from app.chat import get_response
 
 
 
@@ -201,3 +202,14 @@ def search():
 
 
     return render_template("listen.html",form = form , title = title)
+
+
+
+#route for returning the chat bot response to the user ------------------------------------------------------------------------------------------------------------------------------------
+@app.route("/predict")
+def predict():
+    user_text = request.get_json().get("message")
+    #TODO : check if user input is valid
+    response = get_response(user_text)
+    bot_response  = {"answer" : response}
+    return jsonify(bot_response)

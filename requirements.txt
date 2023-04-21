@@ -7,3 +7,6 @@ flask-Mail
 flask-dotenv
 python-dotenv
 pyjwt
+torch
+nltk
+numpy

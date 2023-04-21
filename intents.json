@@ -1,0 +1,60 @@
+{
+    "intents": [
+      {
+        "tag": "greeting",
+        "patterns": [
+          "Hello",
+          "Hi",
+          "Hey",
+          "Greetings",
+          "Good morning",
+          "Good afternoon",
+          "Good evening"
+        ],
+        "responses": [
+          "Hello! How can I assist you today?",
+          "Hi there! How may I help you?",
+          "Hey, how can I be of assistance?",
+          "Greetings! What can I do for you today?",
+          "Good [morning/afternoon/evening]! How can I help you today?"
+        ]
+      },
+      {
+        "tag": "goodbye",
+        "patterns": [
+          "Thank you",
+          "Thanks",
+          "Goodbye",
+          "Bye",
+          "See you",
+          "Take care"
+        ],
+        "responses": [
+          "You're welcome! Have a great day!",
+          "No problem, happy to help! Goodbye!",
+          "You too, take care!",
+          "Goodbye! Come back soon!",
+          "See you later! Have a great day!",
+          "Thanks for visiting! Goodbye!"
+        ]
+      },
+      {
+        "tag": "prices",
+        "patterns": [
+          "What are your prices?",
+          "How much does it cost?",
+          "What is the pricing?",
+          "Do you have any pricing plans?",
+          "What are the rates?"
+        ],
+        "responses": [
+          "We offer a variety of pricing plans depending on your needs. Our basic plan starts at $XX per month, our premium plan starts at $XXX per month, and our enterprise plan is priced on a case-by-case basis. Would you like more information about our plans?",
+          "Our prices vary depending on the plan you choose. Our basic plan starts at $XX per month, our premium plan starts at $XXX per month, and our enterprise plan is priced on a case-by-case basis. Would you like more information about our plans?",
+          "Our pricing is based on the plan you choose. Our basic plan starts at $XX per month, our premium plan starts at $XXX per month, and our enterprise plan is priced on a case-by-case basis. Would you like more information about our plans?",
+          "Yes, we offer several pricing plans. Our basic plan starts at $XX per month, our premium plan starts at $XXX per month, and our enterprise plan is priced on a case-by-case basis. Would you like more information about our plans?",
+          "Our rates depend on the plan you choose. Our basic plan starts at $XX per month, our premium plan starts at $XXX per month, and our enterprise plan is priced on a case-by-case basis. Would you like more information about our plans?"
+        ]
+      }
+    ]
+  }
+  
