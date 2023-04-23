@@ -1,15 +1,15 @@
 {% extends 'layout.html' %}
 {% block style %}
-<link rel="stylesheet" href="{{url_for('static',filename='login.css')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='form-page.css')}}">
 {% endblock %}
 {% block content%}
-<main id="login-section" class="">
+<main  class="form-page">
     
     <div class="container">
         <h1 class="text-center ">{{title}}</h1>
         <form class="form" action="/login" method="post" novalidate>
             {{ form.hidden_tag() }}
-            <div class="form-group col-12">
+            <div class="form-group col-12 mb-3">
                 {{ form.username.label }}
                 {{ form.username(size=32,class_='form-control',autocomplete='off') }}
                 {% for error in form.username.errors %}
@@ -17,7 +17,7 @@
                 {% endfor %}
             </div>
     
-            <div class="form-group col-12">
+            <div class="form-group col-12 mb-3">
                 {{ form.password.label }}
                 {{ form.password(size=32,class_='form-control',autocomplete='off') }}
                 {% for error in form.password.errors %}
@@ -25,11 +25,11 @@
                 {% endfor %}
             </div>
     
-            <div class="form-group col-2">
+            <div class="form-group col-2 mb-3">
                 <p>{{ form.remember_me(class_='form-check-input') }}  <span class="form-check-label">{{ form.remember_me.label }}</span></p>
             </div>
     
-            <div>
+            <div mb-3>
                 {{ form.submit(class_='btn btn-primary') }}
                 <a href="{{ url_for('request_reset')}}">Forgot password?</a>
             </div>
