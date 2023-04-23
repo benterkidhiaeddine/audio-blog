@@ -74,6 +74,7 @@ class Chatbox {
             if (item.name === "Sam")
             {
                 html += '<div class="messages__item messages__item--visitor">' + item.message + '</div>'
+                html += '<div>' + item.name +':' + '</div>'
             }
             else
             {
