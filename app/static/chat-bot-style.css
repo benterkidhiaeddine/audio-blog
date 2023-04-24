@@ -32,6 +32,14 @@ body {
     position: fixed;
     bottom: 30px;
     right: 30px;
+    pointer-events: none;
+
+    
+
+}
+
+.chatbox:has(.chatbox__support,.chatbox--active){
+
 }
 
 /* CONTENT IS CLOSE */
@@ -43,11 +51,16 @@ body {
     height: 500px;
     z-index: -123456;
     opacity: 0;
-    transition: all .5s ease-in-out;
+    pointer-events: none;
+  
+   
+    transition: opacity,transform .5s ease-in-out;
 }
 
 /* CONTENT ISOPEN */
 .chatbox--active {
+    pointer-events: all;
+    visibility: visible;
     transform: translateY(-40px);
     z-index: 123456;
     opacity: 1;
@@ -56,6 +69,8 @@ body {
 
 /* BUTTON */
 .chatbox__button {
+    pointer-events:all;
+
     text-align: right;
 }
 
