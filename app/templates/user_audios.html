@@ -1,6 +1,10 @@
 {% extends "layout.html" %}
-
+{% block style %}
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/greghub/green-audio-player/dist/css/green-audio-player.min.css">
+<link rel="stylesheet"  type="text/css" href="{{ url_for('static',filename='custom-audio-player.css')}}">
+{%  endblock %}
 {% block content %}
+<script src="{{url_for('static',filename='custom-audio-player.js')}}"></script>
 <div class="container">
         <h1 class="text-center mb-2">{{title}}</h1>
         {% if not files %}
@@ -16,21 +20,29 @@
                   Answer {{file['name']}}
                 </button>
               </h2>
-              <div id="collapse{{loop.index}}" class="accordion-collapse collapse show" data-bs-parent="#accordionExample{{loop.index}}">
-                <div class="accordion-body">
-                    <audio  controls src="{{ url_for('download_file',filename = file['path'] , user_id = user_id )}}"></audio>
-    
+              <div id="collapse{{loop.index}}" class="accordion-collapse collapse show p-2 d-flex justify-content-center align-content-center" data-bs-parent="#accordionExample{{loop.index}}">
+               
+                <div class="accordion-body-{{loop.index}}">
+                  <audio   src="{{ url_for('download_file',filename = file['path'] , user_id = user_id )}}"></audio>
+      
                 </div>
               </div>
             </div>
-          </div>
-    
+        </div>
+        
+
+
+         
+          <script type="text/javascript" >
+            new GreenAudioPlayer('.accordion-body-{{loop.index}}',audioDurationSeconds=10);
+          </script>
         {% endfor %}
 
         
 </div>
 
-<script src="{{url_for('static',filename='custom-audio-player.js')}}"></script>
+
+
 {% endblock %}
 
 

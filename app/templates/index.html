@@ -156,6 +156,7 @@
             let recorder = new MediaRecorder(stream);
             recorder.ondataavailable = event => {
                 chunks.push(event.data);
+                
               };
               
             recorder.start();
@@ -191,6 +192,7 @@
               formData.append('audio_file', blob);
               //get the number of the selected question the user want to record his answer to
               formData.append('question_number',selectedQuestion.value);
+              formData.append('durationSeconds',seconds);
 
               fetch(uploadURL, {
                 method: "POST",
