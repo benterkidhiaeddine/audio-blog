@@ -1,26 +1,30 @@
 {% extends "layout.html" %}
-
+{% block style %}
+<link rel="stylesheet" href="{{url_for('static',filename='form-page.css')}}">
+{% endblock %}
 
 {% block content %}
-<h1 class="text-center ">{{title}}</h1>
 
-<div class="container">
-    <form class="form" action="/search" method="post" novalidate>
-        {{ form.hidden_tag() }}
-        <div class="form-group col-12 mb-2">
-            {{ form.searched.label }}
-            <hr>
-            {{ form.searched(size=32,class_='form-control',autocomplete='off') }}
-            {% for error in form.searched.errors %}
-            <div class="text-danger" >{{ error  }}</div>
-            {% endfor %}
-        </div>
-
-        <div>
-            {{ form.submit(class_='btn btn-primary') }}
-          
-        </div>
-    </form>
-</div>
+<main class="form-page">
+    <div class="container">
+        <h1 class="text-center ">{{title}}</h1>
+        <form class="form" action="/search" method="post" novalidate>
+            {{ form.hidden_tag() }}
+            <div class="form-group col-12 mb-2">
+                {{ form.searched.label }}
+                <hr>
+                {{ form.searched(size=32,class_='form-control',autocomplete='off') }}
+                {% for error in form.searched.errors %}
+                <div class="text-danger" >{{ error  }}</div>
+                {% endfor %}
+            </div>
+    
+            <div>
+                {{ form.submit(class_='btn btn-primary') }}
+    
+            </div>
+        </form>
+    </div>
+</main>
 
 {% endblock %}
