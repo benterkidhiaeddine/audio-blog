@@ -15,7 +15,7 @@
                 {{ form.hidden_tag() }}
         
                 <div class="form-group col-12 mb-3">
-                    {{ form.email.label }}>
+                    {{ form.email.label }}
                     {{ form.email(size=32,class_='form-control',autocomplete='off') }}
                     {% for error in form.email.errors %}
                     <p class="text-danger">{{ error }}</p>
