@@ -215,9 +215,8 @@ class GreenAudioPlayer {
         this.player.addEventListener('timeupdate', this.updateProgress.bind(self));
         this.player.addEventListener('volumechange', this.updateVolume.bind(self));
         this.player.volume = 0.81;
-        this.player.addEventListener('loadedmetadata', () => {
-            self.totalTime.textContent = GreenAudioPlayer.formatTime(audioDurationSeconds);
-        });
+        this.totalTime.textContent = GreenAudioPlayer.formatTime(audioDurationSeconds);
+     
         this.player.addEventListener('seeking', this.showLoadingIndicator.bind(self));
         this.player.addEventListener('seeked', this.hideLoadingIndicator.bind(self));
         this.player.addEventListener('canplay', this.hideLoadingIndicator.bind(self));

@@ -34,7 +34,7 @@
 
          
           <script type="text/javascript" >
-            new GreenAudioPlayer('.accordion-body-{{loop.index}}',audioDurationSeconds=10);
+            new GreenAudioPlayer('.accordion-body-{{loop.index}}',audioDurationSeconds="{{file['audio_duration']}}");
           </script>
         {% endfor %}
 

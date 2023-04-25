@@ -55,7 +55,7 @@ class User(UserMixin,db.Model):
 class Audio(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     answer_number = db.Column(db.Integer)
-    audio_URL = db.Column(db.String(120))
+    audio_duration_seconds = db.Column(db.Integer,default = 0)
     user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
 
 @login.user_loader

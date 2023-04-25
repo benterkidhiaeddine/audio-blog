@@ -92,6 +92,7 @@
       const selectedQuestion = document.getElementById("question-selection");
       const appendMinutes = document.getElementById('minutes');
       const appendSeconds = document.getElementById('seconds');
+      let durationSeconds = 0;
       let seconds = 00;
       let minutes = 00;
       let Interval;
@@ -117,6 +118,7 @@
     
         function startTimer () {
           seconds++; 
+          durationSeconds++;
           
           if(seconds <= 9){
             appendSeconds.innerHTML = "0" + seconds;
@@ -192,7 +194,7 @@
               formData.append('audio_file', blob);
               //get the number of the selected question the user want to record his answer to
               formData.append('question_number',selectedQuestion.value);
-              formData.append('durationSeconds',seconds);
+              formData.append('duration_seconds',durationSeconds);
 
               fetch(uploadURL, {
                 method: "POST",

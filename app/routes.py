@@ -6,7 +6,7 @@ import os
 from mimetypes import guess_extension
 
 from app import app,db
-from app.models import User
+from app.models import User,Audio
 from app.forms import LoginForm,RegisterForm,PasswordResetForm,RequestResetForm,SearchForm
 from app.mail import send_email
 from app.chat import get_response
@@ -142,13 +142,29 @@ def audio_upload():
         file = request.files['audio_file']
         extname = guess_extension(file.mimetype)
         #eventualy write code for validating extention types
-        print(extname)
         if not extname:
             abort(400)
 
         question_number = request.form.get("question_number")
+        audio_duration = request.form.get("duration_seconds")
+        print(audio_duration)
+
         dir_path = os.path.join(current_app.instance_path,current_app.config.get("UPLOAD_DIRECTORY"),current_user.get_id()) 
-        print(dir_path)
+
+        #save duration of audio in database
+        
+        #check if there was already a recording in the database for the question and author
+        audio = Audio.query.filter_by(answer_number = question_number , author = current_user).first()
+        if audio is None:
+            audio = Audio( answer_number = question_number,audio_duration_seconds = audio_duration , author = current_user )
+            db.session.add(audio)
+            db.session.commit()
+
+        else:
+            audio.audio_duration_seconds = audio_duration
+            db.session.commit()
+
+
         print(os.path.exists(dir_path))
         if not os.path.exists(dir_path):
            os.mkdir(dir_path)
@@ -163,9 +179,16 @@ def user_audios(user_id):
     file_paths = os.listdir(os.path.join(current_app.instance_path,current_app.config['UPLOAD_DIRECTORY'],str(user_id)))
     file_names = [ os.path.splitext(file)[0] for file in file_paths]
     files = []
-    for file_path,file_name in zip(file_paths,file_names):
-        files.append({"name":file_name,"path":file_path})
 
+
+    
+    for file_path,file_name in zip(file_paths,file_names):
+        audio  = Audio.query.filter_by( author = current_user , answer_number = file_name).first()
+       
+        if audio is not None:
+            audio_duration = audio.audio_duration_seconds
+        files.append({"name":file_name,"path":file_path,"audio_duration":audio_duration})
+    print(files)
     title = "Audio answers"
     return render_template("user_audios.html",files = files,title = title ,user_id = user_id)
    
