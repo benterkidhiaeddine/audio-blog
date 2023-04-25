@@ -227,6 +227,16 @@ def search():
     return render_template("listen.html",form = form , title = title)
 
 
+#other pages routes 
+@app.route("/pricing")
+def pricing():
+    title = "Pricing"
+    return render_template('pricing.html', title = title)
+
+@app.route('/faq')
+def faq():
+    title = "FAQ"
+    return render_template('faq.html')
 
 #route for returning the chat bot response to the user ------------------------------------------------------------------------------------------------------------------------------------
 @app.route("/predict",methods =['POST'])
@@ -236,3 +246,5 @@ def predict():
     response = get_response(user_text)
     bot_response  = {"answer" : response}
     return jsonify(bot_response)
+
+

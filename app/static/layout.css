@@ -7,3 +7,20 @@
 .footer-links:hover{
     text-decoration: underline;
 }
+
+.other-links {
+    display: flex;
+    margin-left: auto;
+    gap: 20px;
+
+}
+
+
+
+
+@media only screen and  (max-width:991px){
+    .other-links{
+        display: block;
+        margin-left: 0;
+    }
+}
