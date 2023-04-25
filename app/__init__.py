@@ -31,6 +31,7 @@ login = LoginManager(app)
 mail = Mail(app)
 
 login.login_view = 'login'
+login.login_message_category = "alert alert-warning"
 
 #import routes for different views , and models for the database models
 from . import routes,models
