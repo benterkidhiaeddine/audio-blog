@@ -6,7 +6,7 @@ from flask_login import LoginManager
 from flask_mail import Mail
 import os
 
-
+#comment test 
 app = Flask(__name__)
 app.testing = False
 app.config.from_object(Config)
